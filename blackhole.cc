@@ -67,7 +67,7 @@ class RoutingExperiment
     double m_txp{7.5};                                     //!< Tx power.
     bool m_traceMobility{false};                           //!< Enable mobility tracing.
     bool m_flowMonitor{false};                             //!< Enable FlowMonitor.
-    uint32_t m_blackHoleNodeId{1};                         //!< Black hole node ID (new)
+    uint32_t m_blackHoleNodeId{1};                         //!< Black hole node ID
 };
 
 RoutingExperiment::RoutingExperiment()
@@ -163,7 +163,7 @@ main(int argc, char* argv[])
     return 0;
 }
 
-// New class definition for BlackHoleAodv
+// Class definition for BlackHoleAodv
 class BlackHoleAodv : public aodv::RoutingProtocol
 {
 public:
@@ -249,19 +249,18 @@ RoutingExperiment::Run()
     adhocNodes.Create(nWifis);
 
     // Set up the Black Hole node
-    Ptr<Node> blackHoleNode = adhocNodes.Get(m_blackHoleNodeId); // New
-    Ptr<BlackHoleAodv> blackHoleAodv = CreateObject<BlackHoleAodv>(); // New
-    blackHoleNode->AggregateObject(blackHoleAodv); // New
+    Ptr<Node> blackHoleNode = adhocNodes.Get(m_blackHoleNodeId);
+    Ptr<BlackHoleAodv> blackHoleAodv = CreateObject<BlackHoleAodv>();
+    blackHoleNode->AggregateObject(blackHoleAodv); 
 
     // Install the Internet stack on the black hole node
-    InternetStackHelper internet; // Updated
-    internet.Install(blackHoleNode); // Updated
+    internet.Install(blackHoleNode); 
 
     // Set up the rest of the nodes with AODV
     AodvHelper aodv;
     internet.SetRoutingHelper(aodv);
     for (uint32_t i = 0; i < adhocNodes.GetN(); ++i) {
-        if (i != m_blackHoleNodeId) { // New
+        if (i != m_blackHoleNodeId) { 
             internet.Install(adhocNodes.Get(i));
         }
     }
